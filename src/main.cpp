@@ -28,7 +28,7 @@ int main()
     {
         //Usamos el delta time
         std::chrono::steady_clock::time_point current_time = std::chrono::steady_clock::now(); // Tiempo actual
-        delta_time = std::chrono::duration<float>(current_time - last_time).count(); // Diferencia en segundos
+        delta_time = GetFrameTime();
         last_time = current_time; // Actualizamos el tiempo anterior
 
         state_machine.handle_state_changes(delta_time);

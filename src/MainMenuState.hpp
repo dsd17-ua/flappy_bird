@@ -22,4 +22,5 @@ class MainMenuState : public GameState
     
     private:
         char entered_key;
+        const float RADIO_PAJARO = 17.0f;
 };

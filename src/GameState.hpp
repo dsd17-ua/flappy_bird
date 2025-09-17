@@ -2,6 +2,11 @@
 #include <memory>
 
 class StateMachine;
+struct Bird{
+    float x;
+    float y;
+    float vy; // Velocidad vertical
+};
 
 class GameState
 {
@@ -22,4 +27,6 @@ class GameState
 
     protected:
         StateMachine* state_machine;
+        Bird bird;
+        const float GRAVEDAD = 600.0f; // Aceleración debida a la gravedad (pixels/seg^2)
 };
