@@ -1,4 +1,4 @@
-#include <MainMenuState.hpp>
+#include "MainMenuState.hpp"
 #include <iostream>
 
 MainMenuState::MainMenuState()
@@ -11,9 +11,9 @@ void MainMenuState::init()
 }
 
 void MainMenuState::handleInput()
-{
-    std::cout << "Enter a key: ";
-    this->entered_key = std::cin.get();
+{ //Comentar para el ejercicio 0
+    //std::cout << "Enter a key: ";
+    //this->entered_key = std::cin.get();
 }
 
 void MainMenuState::update(float deltaTime)
@@ -23,5 +23,10 @@ void MainMenuState::update(float deltaTime)
 
 void MainMenuState::render()
 {
-    std::cout << "You entered: " << this->entered_key << std::endl;
+    BeginDrawing();
+    ClearBackground(RAYWHITE);
+
+    DrawText("Bienvenido a Flappy Bird DCA", 10, 200, 20, DARKGRAY); 
+ 
+    EndDrawing();
 }
