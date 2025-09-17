@@ -1,8 +1,5 @@
 #pragma once
 #include "GameState.hpp"
-extern "C" {
-    #include <raylib.h>
-}
 
 
 class MainMenuState : public GameState
@@ -23,4 +20,11 @@ class MainMenuState : public GameState
     private:
         char entered_key;
         const float RADIO_PAJARO = 17.0f;
+        std::deque<PipePair> pipes;
+        const float PIPE_W = 32.0f;
+        const float PIPE_H = 320.0f;
+        const float PIPE_SPEED = 120.0f; // Velocidad a la que se mueven las tuberías (pixels/seg)
+        const float SPAWN_EVERY = 1.5f; // Cada cuantos segundos aparece un nuevo par de tuberías
+        float spawnTimer = 0.0f;
+        const float PIPE_GAP = 100.0f; // Espacio vertical entre las tuberías superior e inferior
 };

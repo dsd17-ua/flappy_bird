@@ -1,11 +1,22 @@
 #pragma once
 #include <memory>
+#include <deque>
+extern "C" {
+    #include <raylib.h>
+}
 
 class StateMachine;
 struct Bird{
     float x;
     float y;
     float vy; // Velocidad vertical
+};
+
+struct PipePair{
+    Rectangle top;
+    Rectangle bot;
+    bool scored = false; // Para saber si ya se ha sumado el punto por pasar este par de tuberías
+
 };
 
 class GameState

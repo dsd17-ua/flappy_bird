@@ -40,6 +40,30 @@ void MainMenuState::update(float deltaTime)
         bird.y = 512 - RADIO_PAJARO;
         bird.vy = 0;
     }
+
+    spawnTimer += deltaTime; // Actualizamos el temporizador de spawn
+    if (spawnTimer >= SPAWN_EVERY) { //si ha pasado el tiempo suficiente, generamos un nuevo par de tuberías
+        spawnTimer = 0.0f;
+
+        int offsetTop = GetRandomValue(PIPE_H / 2, GetScreenHeight() / 2);
+
+        PipePair newPipe;
+        newPipe.top = { (float)GetScreenWidth(), (float)-offsetTop, PIPE_W, PIPE_H };
+        newPipe.bot = { (float)GetScreenWidth(), (float)(PIPE_H - offsetTop + PIPE_GAP), PIPE_W, PIPE_H };
+        
+        pipes.push_back(newPipe);
+    }
+
+    // --- Mover tuberías existentes ---
+    for (auto& pipe : pipes) {
+        pipe.top.x -= PIPE_SPEED * deltaTime;
+        pipe.bot.x -= PIPE_SPEED * deltaTime;
+    }
+
+    // --- Eliminar tuberías que salieron de pantalla ---
+    while (!pipes.empty() && pipes.front().top.x + PIPE_W < 0) {
+        pipes.pop_front();
+    }
 }
 
 void MainMenuState::render()
@@ -51,6 +75,13 @@ void MainMenuState::render()
 
     //DIBUJAMOS EL PAJARO
     DrawCircle((int)bird.x, (int)bird.y, RADIO_PAJARO, RED);
+
+    // --- render de pipes ---
+    for (const auto& pipe : pipes) {
+        DrawRectangle((int)pipe.top.x, (int)pipe.top.y, (int)pipe.top.width, (int)pipe.top.height, GREEN);
+        DrawRectangle((int)pipe.bot.x, (int)pipe.bot.y, (int)pipe.bot.width, (int)pipe.bot.height, GREEN);
+    }
+
  
     EndDrawing();
 }
