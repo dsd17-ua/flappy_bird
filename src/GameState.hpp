@@ -10,6 +10,9 @@ struct Bird{
     float x;
     float y;
     float vy; // Velocidad vertical
+    //srpites
+    int width;
+    int height;
 };
 
 struct PipePair{

@@ -15,6 +15,20 @@ void MainMenuState::init()
     this->bird.x=200.0f;
     this->bird.y=200.0f;
     this->bird.vy=0.0f; // El pajaro empieza sin velocidad
+
+    // cargar sprite del pájaro
+    birdSprite = LoadTexture("assets/yellowbird-midflap.png");
+    bird.width = birdSprite.width;
+    bird.height = birdSprite.height;
+
+    // cargar sprite de tuberías
+    pipeSprite = LoadTexture("assets/pipe-green.png");
+    PIPE_W = pipeSprite.width;
+    PIPE_H = pipeSprite.height;
+
+    // definir gap como altura del pájaro * 4.5
+    PIPE_GAP = bird.height * 4.5f;
+
 }
 
 void MainMenuState::handleInput()
@@ -78,11 +92,12 @@ void MainMenuState::update(float deltaTime)
 
     // --- Bounding box del pájaro ---
     Rectangle playerBox = {
-        bird.x - RADIO_PAJARO,
-        bird.y - RADIO_PAJARO,
-        RADIO_PAJARO * 2,
-        RADIO_PAJARO * 2
+        bird.x,
+        bird.y,
+        (float)bird.width,
+        (float)bird.height
     };
+
 
     //COLISIONES CON TUBERIAS
     for (const auto& pipe : pipes) {
@@ -104,32 +119,36 @@ void MainMenuState::update(float deltaTime)
 
 }
 
+        
+
 void MainMenuState::render()
 {
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    DrawText("Bienvenido a Flappy Bird DCA", 10, 200, 20, DARKGRAY); 
+    // --- Dibujar el pájaro con sprite ---
+    DrawTexture(birdSprite, (int)bird.x, (int)bird.y, WHITE);
 
-    //DIBUJAMOS EL PAJARO
-    DrawCircle((int)bird.x, (int)bird.y, RADIO_PAJARO, RED);
-
-    // --- render de pipes ---
+    // --- Dibujar tuberías ---
     for (const auto& pipe : pipes) {
-        DrawRectangle((int)pipe.top.x, (int)pipe.top.y, (int)pipe.top.width, (int)pipe.top.height, GREEN);
-        DrawRectangle((int)pipe.bot.x, (int)pipe.bot.y, (int)pipe.bot.width, (int)pipe.bot.height, GREEN);
+        // tubería superior (rotada 180 grados)
+        DrawTextureEx(pipeSprite, {pipe.top.x + PIPE_W, pipe.top.y + PIPE_H}, 180.f, 1.0f, WHITE);
+
+        // tubería inferior
+        DrawTextureEx(pipeSprite, {pipe.bot.x, pipe.bot.y}, 0.f, 1.0f, WHITE);
     }
-/*
-    Rectangle playerBox = {
-        bird.x - RADIO_PAJARO,
-        bird.y - RADIO_PAJARO,
-        RADIO_PAJARO * 2,
-        RADIO_PAJARO * 2
-    };//DEBUG
-    DrawRectangleLines(playerBox.x, playerBox.y, playerBox.width, playerBox.height, BLUE);
-*/
+
+    // --- Dibujar puntuación ---
     std::string scoreText = std::to_string(score);
     DrawText(scoreText.c_str(), 10, 10, 30, BLACK);
 
     EndDrawing();
+}
+
+//destructor
+MainMenuState::~MainMenuState()
+{
+    UnloadTexture(birdSprite);
+    UnloadTexture(pipeSprite);
+
 }
