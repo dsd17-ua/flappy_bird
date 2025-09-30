@@ -1,4 +1,6 @@
 #include "MainMenuState.hpp"
+#include "GameOverState.hpp"
+#include "StateMachine.hpp"
 #include <iostream>
 
 MainMenuState::MainMenuState()
@@ -18,7 +20,7 @@ void MainMenuState::init()
 void MainMenuState::handleInput()
 { 
     if(IsKeyPressed(KEY_SPACE)){
-        bird.vy=-300.0f; // impulso hacia arriba. Valor negativo porque el origen (0,0) está en la esquina superior izquierda
+        bird.vy=-250.0f; // impulso hacia arriba. Valor negativo porque el origen (0,0) está en la esquina superior izquierda
     }
 }
 
@@ -58,12 +60,40 @@ void MainMenuState::update(float deltaTime)
     for (auto& pipe : pipes) {
         pipe.top.x -= PIPE_SPEED * deltaTime;
         pipe.bot.x -= PIPE_SPEED * deltaTime;
+        
     }
 
     // --- Eliminar tuberías que salieron de pantalla ---
     while (!pipes.empty() && pipes.front().top.x + PIPE_W < 0) {
         pipes.pop_front();
     }
+
+    // --- Bounding box del pájaro ---
+    Rectangle playerBox = {
+        bird.x - RADIO_PAJARO,
+        bird.y - RADIO_PAJARO,
+        RADIO_PAJARO * 2,
+        RADIO_PAJARO * 2
+    };
+
+    //COLISIONES CON TUBERIAS
+    for (const auto& pipe : pipes) {
+        if (CheckCollisionRecs(playerBox, pipe.top) || // comprobamos colisión con cada tubería
+            CheckCollisionRecs(playerBox, pipe.bot)) {
+                std::cout << "Colisión detectada!" << std::endl;
+
+            this->state_machine->add_state(std::make_unique<GameOverState>(), true); //si se produce colisión, vamos al estado de Game Over
+            return; // salimos del update para no seguir
+        }
+    }
+
+    //COLISION CON LIMITES DE LA VENTANA
+    if (bird.y - RADIO_PAJARO < 0 || bird.y + RADIO_PAJARO > GetScreenHeight()) {
+        this->state_machine->add_state(std::make_unique<GameOverState>(), true);
+        return;
+    }
+
+
 }
 
 void MainMenuState::render()
@@ -82,6 +112,13 @@ void MainMenuState::render()
         DrawRectangle((int)pipe.bot.x, (int)pipe.bot.y, (int)pipe.bot.width, (int)pipe.bot.height, GREEN);
     }
 
- 
+    Rectangle playerBox = {
+        bird.x - RADIO_PAJARO,
+        bird.y - RADIO_PAJARO,
+        RADIO_PAJARO * 2,
+        RADIO_PAJARO * 2
+    };//DEBUG
+    DrawRectangleLines(playerBox.x, playerBox.y, playerBox.width, playerBox.height, BLUE);
+
     EndDrawing();
 }

@@ -4,19 +4,26 @@
 StateMachine::StateMachine()
 {
     this->new_state = nullptr;
+    this->is_Adding = false;
+    this->is_removing = false;
+    this->is_Replacing = false;
+    this->is_ending = false;
 }
 
 void StateMachine::add_state(std::unique_ptr<GameState> newState, bool is_replacing)
 {
-    is_Adding = true;
-    is_replacing = is_replacing;
+    this->is_Adding = true;
+    this->is_Replacing = is_replacing;   // ← aquí está el bug
     this->new_state = std::move(newState);
+
+    // MUY IMPORTANTE: el nuevo estado recibe el puntero a esta máquina
+    this->new_state->setStateMachine(this);
 }
 
 void StateMachine::remove_state(bool value)
 {
-    is_removing = true;
-    is_ending = value;
+    this->is_removing = true;
+    this->is_ending = value;
 }
 
 void StateMachine::handle_state_changes(float& deltaTime)
@@ -26,7 +33,7 @@ void StateMachine::handle_state_changes(float& deltaTime)
         this->states_machine.pop();
         this->is_removing = false;
 
-        if (!this->is_Adding)
+        if (!this->is_Adding && !this->states_machine.empty())
         {
             this->states_machine.top()->resume();
             deltaTime = 0.0f;
@@ -49,4 +56,3 @@ void StateMachine::handle_state_changes(float& deltaTime)
         deltaTime = 0.0f;
     }
 }
-
