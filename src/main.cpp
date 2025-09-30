@@ -8,7 +8,7 @@ extern "C" {
 int main()
 {
     //tamanyo de la ventana
-    const int screenWidth = 288;
+    const int screenWidth = 400;
     const int screenHeight = 512;
     InitWindow(screenWidth, screenHeight, "Flappy Bird");
     SetTargetFPS(60);               // EL juego corre a 60 FPS max

@@ -111,7 +111,7 @@ void MainMenuState::render()
         DrawRectangle((int)pipe.top.x, (int)pipe.top.y, (int)pipe.top.width, (int)pipe.top.height, GREEN);
         DrawRectangle((int)pipe.bot.x, (int)pipe.bot.y, (int)pipe.bot.width, (int)pipe.bot.height, GREEN);
     }
-
+/*
     Rectangle playerBox = {
         bird.x - RADIO_PAJARO,
         bird.y - RADIO_PAJARO,
@@ -119,6 +119,7 @@ void MainMenuState::render()
         RADIO_PAJARO * 2
     };//DEBUG
     DrawRectangleLines(playerBox.x, playerBox.y, playerBox.width, playerBox.height, BLUE);
+*/
 
     EndDrawing();
 }
