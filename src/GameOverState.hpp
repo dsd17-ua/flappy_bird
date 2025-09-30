@@ -7,7 +7,7 @@ extern "C" {
 
 class GameOverState : public GameState {
 public:
-    GameOverState() = default;
+    GameOverState(int score) : finalScore(score) {}
     ~GameOverState() override = default;
 
     void init() override {}
@@ -16,4 +16,6 @@ public:
     void render() override;
     void pause() override {}
     void resume() override {}
+private:
+    int finalScore = 0;
 };

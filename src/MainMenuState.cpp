@@ -58,8 +58,16 @@ void MainMenuState::update(float deltaTime)
 
     // --- Mover tuberías existentes ---
     for (auto& pipe : pipes) {
-        pipe.top.x -= PIPE_SPEED * deltaTime;
-        pipe.bot.x -= PIPE_SPEED * deltaTime;
+        pipe.top.x -= PIPE_SPEED * deltaTime; // Mover tubería superior
+        pipe.bot.x -= PIPE_SPEED * deltaTime; // Mover tubería inferior
+
+
+        //una vez que el pájaro ha pasado la tubería, sumamos un punto
+        if (!pipe.scored && pipe.top.x + PIPE_W < bird.x - RADIO_PAJARO) { //pipe.scored es para que solo sume un punto por tubería
+            score++;
+            pipe.scored = true;
+            std::cout << "Sumando punto! Score: " << score << std::endl;
+        }
         
     }
 
@@ -82,14 +90,14 @@ void MainMenuState::update(float deltaTime)
             CheckCollisionRecs(playerBox, pipe.bot)) {
                 std::cout << "Colisión detectada!" << std::endl;
 
-            this->state_machine->add_state(std::make_unique<GameOverState>(), true); //si se produce colisión, vamos al estado de Game Over
+            this->state_machine->add_state(std::make_unique<GameOverState>(score), true); //si se produce colisión, vamos al estado de Game Over
             return; // salimos del update para no seguir
         }
     }
 
     //COLISION CON LIMITES DE LA VENTANA
     if (bird.y - RADIO_PAJARO < 0 || bird.y + RADIO_PAJARO > GetScreenHeight()) {
-        this->state_machine->add_state(std::make_unique<GameOverState>(), true);
+        this->state_machine->add_state(std::make_unique<GameOverState>(score), true);
         return;
     }
 
@@ -120,6 +128,8 @@ void MainMenuState::render()
     };//DEBUG
     DrawRectangleLines(playerBox.x, playerBox.y, playerBox.width, playerBox.height, BLUE);
 */
+    std::string scoreText = std::to_string(score);
+    DrawText(scoreText.c_str(), 10, 10, 30, BLACK);
 
     EndDrawing();
 }

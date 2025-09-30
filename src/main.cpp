@@ -41,3 +41,5 @@ int main()
     CloseWindow();        
     return 0;
 }
+
+//g++ -o game src/*.cpp -I src/ -I vendor/include/ -L vendor/lib -lraylib -lGL -lm -lpthread -lrt -lX11

@@ -28,4 +28,5 @@ class MainMenuState : public GameState
         const float SPAWN_EVERY = 1.5f; // Cada cuantos segundos aparece un nuevo par de tuberías
         float spawnTimer = 0.0f;
         const float PIPE_GAP = 100.0f; // Espacio vertical entre las tuberías superior e inferior
+        int score=0; // Puntuación del jugador
 };

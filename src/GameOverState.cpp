@@ -17,11 +17,16 @@ void GameOverState::render() {
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    DrawText("GAME OVER", GetScreenWidth()/2 - MeasureText("GAME OVER", 40)/2,
-             GetScreenHeight()/2 - 20, 40, RED);
+    
+    DrawText(TextFormat("GAME OVER"), GetScreenWidth()/2 - MeasureText("GAME OVER", 40)/2,
+        GetScreenHeight()/2 - 20, 40, RED);
+
+    DrawText(TextFormat("Puntuacion: %d", finalScore), // se recibe la puntuación final desde el constructor
+        GetScreenWidth()/2 - MeasureText(TextFormat("Puntuacion: %d", finalScore), 20)/2,
+        GetScreenHeight()/2 + 30, 20, DARKGRAY);
 
     DrawText("Presiona ESPACIO para reiniciar", 30,
-             GetScreenHeight()/2 + 40, 20, DARKGRAY);
+        GetScreenHeight()/2 + 70, 20, DARKGRAY);
 
     EndDrawing();
 }
